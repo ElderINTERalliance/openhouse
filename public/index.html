@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/940f4eb830.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <title>Open House INTERalliance Interest Form</title>
+</head>
+<body>
+    <img id="main" src="images/Elder INTERalliance Twitter Header.png">
+    <img id="logo" src="images/Elder INTERalliance Profile Picture.png">
+
+    <div class="inputcontainer">
+        <h2>first name</h2>
+        <input type="text" id="fname" class="input" autofocus>
+    </div>
+    <div class="inputcontainer">
+        <h2>m.i.</h2>
+        <input type="text" id="mi" class="input" maxlength="1">
+    </div>
+    <div class="inputcontainer">
+        <h2>last name</h2>
+        <input type="text" id="lname" class="input">
+    </div>
+  
+    <div class="inputcontainer">
+        <h2>email</h2>
+        <input type="email" id="email" class="input">
+    </div>
+    <div class="inputcontainer">
+        <h2>grade</h2>
+        <input type="number" min="1" max="12" id="grade" class="input" oninput="(!validity.rangeOverflow||(value=12)) && (!validity.rangeUnderflow||(value=1)) && (!validity.stepMismatch||(value=parseInt(this.value)));">
+    </div>
+    <div class="inputcontainer">
+        <h2>current school</h2>
+        <input type="text" id="school" class="input">
+    </div>
+
+    <div id="footer">
+        <div id="socialicons">
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-instagram"></i>
+                <a>@elderhsia</a>
+        </div>
+        <div id="signupbtn">
+            <h1>I am interested <i class="fas fa-arrow-right"></i></h1>
+        </div>
+
+    </div>
+
+    <div id="successpopup">
+        <h2>That's a success!</h2>
+        <h3 id="close">close</h3>
+        <img src="images/success.svg">
+    </div>
+
+    <div id="cover"></div>
+
+    <script>
+        //Autofill/autocomplete prevention:
+        var inputs = document.getElementsByTagName('input');
+        var empty = [];
+        for(i = 0; i < inputs.length; i++){
+            inputs[i].setAttribute("autocomplete", Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15));
+        }
+
+        function validemail(email){
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function submit(){
+            if(empty.indexOf(true) == -1){
+                if(validemail(document.getElementById("email").value)){
+                    fetch("/submit", {
+                        method: "post",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            fname: document.getElementById("fname").value,
+                            lname: document.getElementById("lname").value,
+                            mi: document.getElementById("mi").value,
+                            email: document.getElementById("email").value,
+                            school: document.getElementById("school").value,
+                            grade: document.getElementById("grade").value
+                        })
+                    })
+                    .then((data)=>{
+                        if (data){
+                            document.getElementById("cover").style.display = "block";
+                            document.getElementById("successpopup").style.display = "block";
+                            for (i = 0; i < inputs.length; i++){
+                                inputs[i].style.backgroundColor = "#393939";
+                                inputs[i].value = "";
+                            }
+                            setTimeout(function (){ 
+                                document.getElementById("cover").style.display = "none";
+                                document.getElementById("successpopup").style.display = "none";
+                            }, 10000);
+                        } else {
+                            console.log("error");
+                        }
+                    })
+                    //This catches errors:
+                    .catch(console.error);
+                } else {
+                    document.getElementById("email").style.backgroundColor = "rgb(211, 78, 78)";
+                }
+            } else {
+                for (i = 0; i < inputs.length; i++){
+                    if(inputs[i].value == ""){
+                        inputs[i].style.backgroundColor = "rgb(211, 78, 78)";
+                    } else {
+                        inputs[i].style.backgroundColor = "#393939";
+                        empty[i] = false;
+                    }
+                }
+            }
+        }
+
+        document.getElementById("signupbtn").addEventListener('click', function(){
+            submit();
+        });
+        document.getElementById("close").addEventListener('click', function() {
+            document.getElementById("cover").style.display = "none";
+            document.getElementById("successpopup").style.display = "none";
+        })
+        for (i = 0; i < inputs.length; i++){
+            inputs[i].addEventListener('keyup', function(e){
+                if(e.keyCode == 13){
+                    for (i = 0; i < inputs.length; i++){
+                        if(inputs[i].value == ""){
+                            empty[i] = true;
+                        } else {
+                            empty[i] = false;
+                        }
+                    }
+                    submit();
+                }
+            })
+        }
+        
+        
+    </script>
+</body>
+</html>

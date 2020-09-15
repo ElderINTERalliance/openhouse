@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/940f4eb830.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
-    <title>Open House INTERalliance Interest Form</title>
+    <title>Clubs Open House INTERalliance Interest Form</title>
 </head>
 <body>
     <img id="main" src="images/Elder INTERalliance Twitter Header.png">
@@ -33,10 +33,6 @@
     <div class="inputcontainer">
         <h2>grade</h2>
         <input type="number" min="1" max="12" id="grade" class="input" oninput="(!validity.rangeOverflow||(value=12)) && (!validity.rangeUnderflow||(value=1)) && (!validity.stepMismatch||(value=parseInt(this.value)));">
-    </div>
-    <div class="inputcontainer">
-        <h2>current school</h2>
-        <input type="text" id="school" class="input">
     </div>
 
     <div id="footer">
@@ -85,7 +81,6 @@
                             lname: document.getElementById("lname").value,
                             mi: document.getElementById("mi").value,
                             email: document.getElementById("email").value,
-                            school: document.getElementById("school").value,
                             grade: document.getElementById("grade").value
                         })
                     })

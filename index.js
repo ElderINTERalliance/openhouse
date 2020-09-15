@@ -21,9 +21,8 @@ app.post("/submit", (req, res) => {
         lname = req.body.lname,
         mi = req.body.mi,
         email = req.body.email,
-        school = req.body.school,
         grade = req.body.grade,
-        newperson = {"fname": fname,"lname": lname,"mi": mi,"email": email,"school": school,"grade": grade};
+        newperson = {"fname": fname,"lname": lname,"mi": mi,"email": email,"grade": grade};
     people[people.length] = newperson
     jetpack.write('people.json', (`{"people": ${JSON.stringify(people)} }`));
     /*jetpack.append('people.json', JSON.stringify(people));

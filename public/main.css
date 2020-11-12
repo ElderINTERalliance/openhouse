@@ -2,7 +2,7 @@
     height: 75px;
     width: 100%;
     background-color: white;
-    position: absolute;
+    position: sticky;
     bottom: 0;
 }
 
@@ -12,17 +12,16 @@ body{
     width: 100%;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 #hero-container {
-    height: 50vh;
+    height: 60vh;
     width: 100%;
     background-image: url("images/Elder INTERalliance Twitter Header.png");
     background-size: auto 100%;
     background-position: center;
-    /* overflow-x: hidden;
-    overflow-y: visible; */
+    background-repeat: no-repeat;
 }
 
 #main{

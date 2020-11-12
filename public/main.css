@@ -15,8 +15,18 @@ body{
     overflow: hidden;
 }
 
-#main{
+#hero-container {
+    height: 50vh;
     width: 100%;
+    background-image: url("images/Elder INTERalliance Twitter Header.png");
+    background-size: auto 100%;
+    background-position: center;
+    /* overflow-x: hidden;
+    overflow-y: visible; */
+}
+
+#main{
+    max-width: 100%;
 }
 
 #logo{

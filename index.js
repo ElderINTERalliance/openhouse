@@ -7,12 +7,6 @@ const jetpack = require("fs-jetpack"), //NOTE: remove if not used
 // Load process.env values from .env file
 require("dotenv").config();
 
-// Set up Airtbale (configure in the .env)
-var Airtable = require("airtable");
-var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  	process.env.AIRTABLE_BASE_ID
-);
-
 // Allow loading of files from the public directory:
 app.use(express.static("public"));
 // Load /public/index.html:
@@ -26,7 +20,7 @@ app.use(bp.urlencoded({ extended: true }));
 
 // Receive data as json:
 app.post("/submit", (req, res) => {
-  	var fname = req.body.fname,
+	var fname = req.body.fname,
 		lname = req.body.lname,
 		mi = req.body.mi,
 		email = req.body.email,
@@ -40,42 +34,47 @@ app.post("/submit", (req, res) => {
 			school: school,
 			grade: grade,
 		};
-  people[people.length] = newperson;
+	people[people.length] = newperson;
 
-  if (process.env.AIRTABLE == "true") {
-    // Send the data to a new record in an Airtable base (configure in the .env)
-    base(process.env.AIRTABLE_TABLE_NAME).create(
-      [
-        {
-          fields: {
-            "First Name": fname,
-            "Last Name": lname,
-            MI: mi,
-            Email: email,
-            "Current School": school,
-            Grade: grade,
-          },
-        },
-      ],
-      function (err, records) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        records.forEach(function (record) {
-          console.log(record.getId());
-        });
-      }
-    );
-  }
+	if (process.env.AIRTABLE == "true") {
+		// Set up Airtbale (configure in the .env)
+		var Airtable = require("airtable");
+		var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+			process.env.AIRTABLE_BASE_ID
+		);
+		// Send the data to a new record in an Airtable base (configure in the .env)
+		base(process.env.AIRTABLE_TABLE_NAME).create(
+			[
+				{
+					fields: {
+						"First Name": fname,
+						"Last Name": lname,
+						MI: mi,
+						Email: email,
+						"Current School": school,
+						Grade: grade,
+					},
+				},
+			],
+			function (err, records) {
+				if (err) {
+					console.error(err);
+					return;
+				}
+				records.forEach(function (record) {
+					console.log(record.getId());
+				});
+			}
+		);
+	}
 
-  if (process.env.JSON == "true") {
+	if (process.env.JSON == "true") {
 		console.log(process.env.JSON);
 		jetpack.write("people.json", `{"people": ${JSON.stringify(people)} }`);
 		/*jetpack.append('people.json', JSON.stringify(people));
 		jetpack.append('people.json', ("}"));*/
-  }
-  res.send(true);
+	}
+	res.send(true);
 });
 // Log on successful launch:
 app.listen(port, () => console.log(`App listening on port ${port}!`));
